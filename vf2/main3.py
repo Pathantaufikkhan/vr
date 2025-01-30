@@ -22,13 +22,24 @@ def load_frames():
     
     for category in FRAME_CATEGORIES:
         category_path = os.path.join(FRAMES_DIR, category)
+        print(f"Checking directory: {category_path}")  # Debugging output
         
         if os.path.exists(category_path):
+            files_found = False
             for file in os.listdir(category_path):
                 if file.lower().endswith((".png", ".jpg", ".jpeg")):
-                    img = cv2.imread(os.path.join(category_path, file), cv2.IMREAD_UNCHANGED)
+                    file_path = os.path.join(category_path, file)
+                    print(f"Found image: {file_path}")  # Debugging output
+                    img = cv2.imread(file_path, cv2.IMREAD_UNCHANGED)
                     if img is not None:
                         categorized_frames[category].append(img)
+                        files_found = True
+
+            if not files_found:
+                print(f"No valid image files found in: {category_path}")
+
+        else:
+            print(f"Directory not found: {category_path}")
 
     return categorized_frames
 
